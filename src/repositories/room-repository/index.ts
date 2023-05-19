@@ -1,11 +1,24 @@
-import { prisma } from '@/config';
+import { prisma, redis } from '@/config';
+
+const cacheKey = 'rooms';
 
 async function findAllByHotelId(hotelId: number) {
-  return prisma.room.findMany({
+  const cachedRooms = await redis.get(cacheKey);
+
+  if (cachedRooms) {
+    const hotels = JSON.parse(cachedRooms);
+    return hotels;
+  }
+
+  const rooms = prisma.room.findMany({
     where: {
       hotelId,
     },
   });
+
+  redis.set(cacheKey, JSON.stringify(rooms));
+
+  return rooms;
 }
 
 async function findById(roomId: number) {

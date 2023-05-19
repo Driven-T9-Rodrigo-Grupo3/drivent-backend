@@ -1,9 +1,22 @@
 import { Ticket, TicketStatus, TicketType } from '@prisma/client';
-import { prisma } from '@/config';
+import { prisma, redis } from '@/config';
 import { CreateTicketParams } from '@/protocols';
 
+const cacheTypesKey = 'ticketsType';
+
 async function findTicketTypes(): Promise<TicketType[]> {
-  return prisma.ticketType.findMany();
+  const cachedTicketTypes = await redis.get(cacheTypesKey);
+
+  if (cachedTicketTypes) {
+    const ticketTypes = JSON.parse(cachedTicketTypes);
+    return ticketTypes;
+  }
+
+  const ticketTypes = prisma.ticketType.findMany();
+
+  redis.set(cacheTypesKey, JSON.stringify(ticketTypes));
+
+  return ticketTypes;
 }
 
 async function findTicketByEnrollmentId(enrollmentId: number): Promise<
