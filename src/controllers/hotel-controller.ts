@@ -10,6 +10,7 @@ export async function getHotels(req: AuthenticatedRequest, res: Response, next: 
     const hotels = await hotelsService.getHotels(userId);
     return res.status(httpStatus.OK).send(hotels);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 }
