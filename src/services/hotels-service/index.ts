@@ -10,6 +10,7 @@ async function listHotels(userId: number) {
     throw notFoundError();
   }
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
+  console.log(ticket);
 
   if (!ticket || ticket.status === 'RESERVED' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
     throw cannotListHotelsError();

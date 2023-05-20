@@ -3,6 +3,7 @@ import { prisma, redis } from '@/config';
 const cacheKey = 'hotels';
 
 async function findHotels() {
+
   const cachedHotels = await redis.get(cacheKey);
 
   if (cachedHotels) {
