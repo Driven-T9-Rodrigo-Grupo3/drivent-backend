@@ -40,3 +40,28 @@ export async function paymentProcess(req: AuthenticatedRequest, res: Response) {
     return res.sendStatus(httpStatus.NOT_FOUND);
   }
 }
+
+export async function stripePayment(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  try {
+    const sessionUrl = await paymentsService.stripePayment(userId);
+    res.send(sessionUrl).status(200);
+  } catch (error) {
+    if (error.name === 'RequestError') {
+      res.sendStatus(500);
+    }
+  }
+}
+
+export async function paymentVerification(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  try {
+    if (!userId) {
+      return res.sendStatus(httpStatus.BAD_REQUEST);
+    }
+    const paidStatus = await paymentsService.verifyUserPayment(userId);
+    return res.status(httpStatus.OK).send({ paid: paidStatus });
+  } catch (error) {
+    return res.sendStatus(httpStatus.BAD_REQUEST);
+  }
+}
