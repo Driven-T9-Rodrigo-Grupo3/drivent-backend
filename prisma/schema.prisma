@@ -19,6 +19,7 @@ model User {
   Session    Session[]    
   Enrollment Enrollment[] 
   Booking    Booking[]    
+  paymentData PaymentData[]
 }
 
 model Session {
@@ -142,4 +143,11 @@ model Booking {
 model Teste {
   id    Int    @id @default(autoincrement())
   name  String
+}
+
+model PaymentData {
+  id     Int    @id @default(autoincrement())
+  userId Int    @unique
+  url    String @db.VarChar(511)
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
