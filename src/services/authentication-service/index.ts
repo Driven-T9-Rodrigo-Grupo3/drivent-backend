@@ -21,6 +21,14 @@ async function signIn(params: SignInParams): Promise<SignInResult> {
   };
 }
 
+async function signInGithub(githubToken:string, userId: number): Promise<void> {
+
+  await sessionRepository.create({
+    token: githubToken,
+    userId
+  })
+}
+
 async function getUserOrFail(email: string): Promise<GetUserOrFailResult> {
   const user = await userRepository.findByEmail(email, { id: true, email: true, password: true });
   if (!user) throw invalidCredentialsError();
@@ -54,6 +62,7 @@ type GetUserOrFailResult = Pick<User, 'id' | 'email' | 'password'>;
 
 const authenticationService = {
   signIn,
+  signInGithub
 };
 
 export default authenticationService;
