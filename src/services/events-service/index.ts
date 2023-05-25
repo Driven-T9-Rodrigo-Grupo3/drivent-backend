@@ -4,8 +4,7 @@ import { notFoundError } from '@/errors';
 import eventRepository from '@/repositories/event-repository';
 import { exclude } from '@/utils/prisma-utils';
 
-async function getFirstEvent():
-  Promise<Omit<GetFirstEventResult, "createdAt" | "updatedAt">> {
+async function getFirstEvent(): Promise<Omit<GetFirstEventResult, 'createdAt' | 'updatedAt'>> {
   const event = await eventRepository.findFirst();
   if (!event) throw notFoundError();
 

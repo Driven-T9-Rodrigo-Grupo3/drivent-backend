@@ -21,12 +21,11 @@ async function signIn(params: SignInParams): Promise<SignInResult> {
   };
 }
 
-async function signInGithub(githubToken:string, userId: number): Promise<void> {
-
+async function signInGithub(githubToken: string, userId: number): Promise<void> {
   await sessionRepository.create({
     token: githubToken,
-    userId
-  })
+    userId,
+  });
 }
 
 async function getUserOrFail(email: string): Promise<GetUserOrFailResult> {
@@ -62,7 +61,7 @@ type GetUserOrFailResult = Pick<User, 'id' | 'email' | 'password'>;
 
 const authenticationService = {
   signIn,
-  signInGithub
+  signInGithub,
 };
 
 export default authenticationService;
