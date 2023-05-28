@@ -13,6 +13,28 @@ export async function getActivites(req: AuthenticatedRequest, res: Response, nex
   }
 }
 
+export async function getBooking(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  try {
+    const { userId } = req;
+
+    const activities = await activitiesService.getBooking(userId);
+    return res.status(httpStatus.OK).send(activities);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getBookingsFromActivity(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  try {
+    const { activityId } = req.params;
+
+    const activities = await activitiesService.getBookingsFromActivity(Number(activityId));
+    return res.status(httpStatus.OK).send(activities);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function bookingActivity(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
     const { userId } = req;

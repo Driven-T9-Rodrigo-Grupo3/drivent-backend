@@ -159,6 +159,7 @@ model Activity {
   capacity         Int
   location         ActivityLocation
   dateTime         DateTime
+  hoursDuration    Int
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
   ActivityBoooking ActivityBoooking[]

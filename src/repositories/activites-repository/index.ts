@@ -24,10 +24,18 @@ async function findById(activityId: number) {
   });
 }
 
-async function findByActivityBookingId(activityBookingId: number) {
+async function findByActivityBooking(userId: number) {
+  return prisma.activityBoooking.findFirst({
+    where: {
+      userId,
+    },
+  });
+}
+
+async function findByActivitiesBookingId(activityId: number) {
   return prisma.activityBoooking.findMany({
     where: {
-      id: activityBookingId,
+      activityId,
     },
   });
 }
@@ -35,7 +43,8 @@ async function findByActivityBookingId(activityBookingId: number) {
 const activitiesRepository = {
   findActivities,
   findById,
-  findByActivityBookingId,
+  findByActivityBooking,
+  findByActivitiesBookingId,
   createBooking,
 };
 

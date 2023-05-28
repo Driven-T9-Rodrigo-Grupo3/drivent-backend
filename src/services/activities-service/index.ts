@@ -5,13 +5,6 @@ import activitiesRepository from '@/repositories/activites-repository';
 import enrollmentRepository from '@/repositories/enrollment-repository';
 import ticketsRepository from '@/repositories/tickets-repository';
 
-async function getActivities() {
-  const activities = await activitiesRepository.findActivities();
-  if (!activities) throw notFoundError();
-
-  return activities;
-}
-
 async function checkEnrollmentTicket(userId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   if (!enrollment) throw cannotBookingError();
@@ -25,10 +18,16 @@ async function checkEnrollmentTicket(userId: number) {
 
 async function checkValidBooking(activityId: number) {
   const activity = await activitiesRepository.findById(activityId);
-  const bookings = await activitiesRepository.findByActivityBookingId(activityId);
+  const bookings = await activitiesRepository.findByActivitiesBookingId(activityId);
 
   if (!activity) throw notFoundError();
   if (activity.capacity <= bookings.length) throw cannotBookingError();
+}
+
+async function getActivities() {
+  const activities = await activitiesRepository.findActivities();
+
+  return activities;
 }
 
 async function bookingActivity(userId: number, activityId: number) {
@@ -40,8 +39,22 @@ async function bookingActivity(userId: number, activityId: number) {
   return activitiesRepository.createBooking({ activityId, userId });
 }
 
+async function getBooking(userId: number) {
+  const booking = await activitiesRepository.findByActivityBooking(userId);
+
+  return booking;
+}
+
+async function getBookingsFromActivity(activityId: number) {
+  const bookings = await activitiesRepository.findByActivitiesBookingId(activityId);
+
+  return bookings;
+}
+
 const activitiesService = {
   getActivities,
+  getBookingsFromActivity,
+  getBooking,
   bookingActivity,
 };
 
