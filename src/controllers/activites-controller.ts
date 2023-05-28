@@ -13,11 +13,12 @@ export async function getActivites(req: AuthenticatedRequest, res: Response, nex
   }
 }
 
-export async function getBooking(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export async function getUserBookingActivity(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
+    const { activityId } = req.params;
     const { userId } = req;
 
-    const activities = await activitiesService.getBooking(userId);
+    const activities = await activitiesService.getUserBookingActivity(userId, Number(activityId));
     return res.status(httpStatus.OK).send(activities);
   } catch (error) {
     next(error);

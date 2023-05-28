@@ -39,8 +39,8 @@ async function bookingActivity(userId: number, activityId: number) {
   return activitiesRepository.createBooking({ activityId, userId });
 }
 
-async function getBooking(userId: number) {
-  const booking = await activitiesRepository.findByActivityBooking(userId);
+async function getUserBookingActivity(userId: number, activityId: number) {
+  const booking = await activitiesRepository.findUserBookingActivity(userId, activityId);
 
   return booking;
 }
@@ -54,7 +54,7 @@ async function getBookingsFromActivity(activityId: number) {
 const activitiesService = {
   getActivities,
   getBookingsFromActivity,
-  getBooking,
+  getUserBookingActivity,
   bookingActivity,
 };
 

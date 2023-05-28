@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import { authenticateToken } from '@/middlewares';
-import { getActivites, getBooking, getBookingsFromActivity, bookingActivity } from '@/controllers';
+import { getActivites, getUserBookingActivity, getBookingsFromActivity, bookingActivity } from '@/controllers';
 
 const activitesRouter = Router();
 
 activitesRouter
   .all('/*', authenticateToken)
   .get('/', getActivites)
-  .get('/user', getBooking)
+  .get('/:activityId/user', getUserBookingActivity)
   .get('/:activityId', getBookingsFromActivity)
   .post('/', bookingActivity);
 
