@@ -27,6 +27,10 @@ async function checkValidBooking(activityId: number) {
 async function getActivities() {
   const activities = await activitiesRepository.findActivities();
 
+  if (!activities || activities.length === 0) {
+    throw notFoundError();
+  }
+
   return activities;
 }
 
@@ -41,12 +45,17 @@ async function bookingActivity(userId: number, activityId: number) {
 
 async function getUserBookingActivity(userId: number, activityId: number) {
   const booking = await activitiesRepository.findUserBookingActivity(userId, activityId);
+  if (!booking) throw notFoundError();
 
   return booking;
 }
 
 async function getBookingsFromActivity(activityId: number) {
   const bookings = await activitiesRepository.findByActivitiesBookingId(activityId);
+
+  if (!bookings || bookings.length === 0) {
+    throw notFoundError();
+  }
 
   return bookings;
 }
