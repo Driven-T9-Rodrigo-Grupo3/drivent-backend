@@ -5,6 +5,8 @@ import { invalidCredentialsError } from './errors';
 import { exclude } from '@/utils/prisma-utils';
 import userRepository from '@/repositories/user-repository';
 import sessionRepository from '@/repositories/session-repository';
+import { fetchUser } from '@/helpers/fetchUser';
+import { exchangeCodeForAccessToken } from '@/helpers/exchangeCode';
 
 async function signIn(params: SignInParams): Promise<SignInResult> {
   const { email, password } = params;
@@ -21,11 +23,20 @@ async function signIn(params: SignInParams): Promise<SignInResult> {
   };
 }
 
-async function signInGithub(githubToken: string, userId: number): Promise<void> {
-  await sessionRepository.create({
-    token: githubToken,
-    userId,
-  });
+async function signInGithub(code: string): Promise<void> {
+  console.log(code);
+  if (!code) throw invalidCredentialsError();
+  try {
+    const githubToken = await exchangeCodeForAccessToken(code);
+    const user = await fetchUser(githubToken);
+    await sessionRepository.create({
+      token: githubToken,
+      userId: user.id,
+    });
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function getUserOrFail(email: string): Promise<GetUserOrFailResult> {
