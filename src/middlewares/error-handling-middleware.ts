@@ -44,6 +44,12 @@ export function handleApplicationErrors(
     });
   }
 
+  if (err.name === 'cannotListActivitiesError') {
+    return res.status(httpStatus.NOT_FOUND).send({
+      message: err.message,
+    });
+  }
+
   if (err.name === 'BadRequestError') {
     return res.status(httpStatus.BAD_REQUEST).send({
       message: err.message,
@@ -57,6 +63,12 @@ export function handleApplicationErrors(
   }
 
   if (err.name === 'CannotBookingError') {
+    return res.status(httpStatus.FORBIDDEN).send({
+      message: err.message,
+    });
+  }
+
+  if (err.name === 'CannotActivityBookingError') {
     return res.status(httpStatus.FORBIDDEN).send({
       message: err.message,
     });
