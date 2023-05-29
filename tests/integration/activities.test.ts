@@ -143,34 +143,34 @@ describe('GET /activities/:activityId', () => {
         updatedAt: activity.updatedAt.toISOString(),
       });
     });
-  });
 
-  it('should respond with status 404 for invalid activity id', async () => {
-    const user = await createUser();
-    const token = await generateValidToken(user);
-    const enrollment = await createEnrollmentWithAddress(user);
-    const ticketType = await createTicketTypeWithHotel();
-    const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
-    const payment = await createPayment(ticket.id, ticketType.price);
+    it('should respond with status 404 for invalid activity id', async () => {
+      const user = await createUser();
+      const token = await generateValidToken(user);
+      const enrollment = await createEnrollmentWithAddress(user);
+      const ticketType = await createTicketTypeWithHotel();
+      const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+      const payment = await createPayment(ticket.id, ticketType.price);
 
-    const activity = await createActivity();
+      const activity = await createActivity();
 
-    const response = await server.get('/activities/100').set('Authorization', `Bearer ${token}`);
+      const response = await server.get('/activities/100').set('Authorization', `Bearer ${token}`);
 
-    expect(response.status).toEqual(httpStatus.NOT_FOUND);
-  });
+      expect(response.status).toEqual(httpStatus.NOT_FOUND);
+    });
 
-  it('should respond with status 404 when activity does not exist', async () => {
-    const user = await createUser();
-    const token = await generateValidToken(user);
-    const enrollment = await createEnrollmentWithAddress(user);
-    const ticketType = await createTicketTypeWithHotel();
-    const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
-    const payment = await createPayment(ticket.id, ticketType.price);
+    it('should respond with status 404 when activity does not exist', async () => {
+      const user = await createUser();
+      const token = await generateValidToken(user);
+      const enrollment = await createEnrollmentWithAddress(user);
+      const ticketType = await createTicketTypeWithHotel();
+      const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+      const payment = await createPayment(ticket.id, ticketType.price);
 
-    const response = await server.get(`/activities/1`).set('Authorization', `Bearer ${token}`);
+      const response = await server.get(`/activities/1`).set('Authorization', `Bearer ${token}`);
 
-    expect(response.status).toEqual(httpStatus.NOT_FOUND);
+      expect(response.status).toEqual(httpStatus.NOT_FOUND);
+    });
   });
 });
 
@@ -222,33 +222,31 @@ describe('GET GET /activities/:activityId/user', () => {
         updatedAt: bookingActivity.updatedAt.toISOString(),
       });
     });
+
+    it('should respond with status 404 for invalid activity id', async () => {
+      const user = await createUser();
+      const token = await generateValidToken(user);
+      const enrollment = await createEnrollmentWithAddress(user);
+      const ticketType = await createTicketTypeWithHotel();
+      const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+      const payment = await createPayment(ticket.id, ticketType.price);
+
+      const activity = await createActivity();
+      const bookingActivity = await createActivityBooking(activity.id, user.id);
+
+      const response = await server.get('/activities/100/user').set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toEqual(httpStatus.NOT_FOUND);
+    });
   });
 
-  it('should respond with status 404 for invalid activity id', async () => {
+  it('should respond with status 404 when activity does not exist', async () => {
     const user = await createUser();
     const token = await generateValidToken(user);
     const enrollment = await createEnrollmentWithAddress(user);
     const ticketType = await createTicketTypeWithHotel();
     const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
     const payment = await createPayment(ticket.id, ticketType.price);
-
-    const activity = await createActivity();
-    const bookingActivity = await createActivityBooking(activity.id, user.id);
-
-    const response = await server.get('/activities/100/user').set('Authorization', `Bearer ${token}`);
-
-    expect(response.status).toEqual(httpStatus.NOT_FOUND);
-  });
-
-  it('should respond with status 404 when bookingActivity does not exist', async () => {
-    const user = await createUser();
-    const token = await generateValidToken(user);
-    const enrollment = await createEnrollmentWithAddress(user);
-    const ticketType = await createTicketTypeWithHotel();
-    const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
-    const payment = await createPayment(ticket.id, ticketType.price);
-
-    const activity = await createActivity();
 
     const response = await server.get(`/activities/1/user`).set('Authorization', `Bearer ${token}`);
 
@@ -363,7 +361,6 @@ describe('POST /activities', () => {
     it('should respond with status 403 if user has not enrollment', async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
-      const ticketType = await createTicketTypeWithHotel();
 
       const activity = await createActivity();
 

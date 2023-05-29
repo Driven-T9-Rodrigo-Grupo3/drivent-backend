@@ -20,7 +20,7 @@ model User {
   Enrollment       Enrollment[]
   Booking          Booking[]
   paymentData      PaymentData[]
-  ActivityBoooking ActivityBoooking[]
+  ActivityBoooking ActivityBooking[]
 }
 
 model Session {
@@ -162,7 +162,8 @@ model Activity {
   hoursDuration    Int
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
-  ActivityBoooking ActivityBoooking[]
+  ActivityBoooking ActivityBooking[]
+  @@index([dateTime])
 }
 
 enum ActivityLocation {
@@ -171,7 +172,7 @@ enum ActivityLocation {
   WORKSHOP
 }
 
-model ActivityBoooking {
+model ActivityBooking {
   id         Int      @id @default(autoincrement())
   User       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int

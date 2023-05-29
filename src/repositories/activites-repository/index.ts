@@ -1,14 +1,14 @@
-import { ActivityBoooking } from '@prisma/client';
+import { ActivityBooking } from '@prisma/client';
 import { prisma } from '@/config';
 
-type CreateParams = Omit<ActivityBoooking, 'id' | 'createdAt' | 'updatedAt'>;
+type CreateParams = Omit<ActivityBooking, 'id' | 'createdAt' | 'updatedAt'>;
 
 async function findActivities() {
   return prisma.activity.findMany();
 }
 
-async function createBooking({ activityId, userId }: CreateParams): Promise<ActivityBoooking> {
-  return prisma.activityBoooking.create({
+async function createBooking({ activityId, userId }: CreateParams): Promise<ActivityBooking> {
+  return prisma.activityBooking.create({
     data: {
       activityId,
       userId,
@@ -25,7 +25,7 @@ async function findById(activityId: number) {
 }
 
 async function findUserBookingActivity(userId: number, activityId: number) {
-  return prisma.activityBoooking.findFirst({
+  return prisma.activityBooking.findFirst({
     where: {
       userId,
       activityId,
@@ -34,7 +34,7 @@ async function findUserBookingActivity(userId: number, activityId: number) {
 }
 
 async function findByActivitiesBookingId(activityId: number) {
-  return prisma.activityBoooking.findMany({
+  return prisma.activityBooking.findMany({
     where: {
       activityId,
     },
